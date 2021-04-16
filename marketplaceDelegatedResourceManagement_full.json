@@ -1,0 +1,134 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "type": "string",
+			"defaultValue": "Upkip IIoT",
+            "metadata": {
+                "description": "Provide a name for this registration definition. For example the name of the Managed Service Provider's offer"
+            }
+        },
+        "mspOfferDescription": {
+            "type": "string",
+			"defaultValue": "Upkip IIoT platform delegated resource management",
+            "metadata": {
+                "description": "Provide a description for this registration definition. For example contact or contract details."
+            }
+        },
+        "managedByTenantId": {
+            "type": "string",
+			"defaultValue": "d4f23865-c0bd-4784-8c5c-165750372dc3",
+            "metadata": {
+                "description": "Specify the Azure Active Directory tenant id of the Managed Service Provider. Resources will be shared to this tenant."
+            }
+        },
+        "authorizations": {
+            "type": "array",
+            "metadata": {
+                "description": "Specify an array of objects, containing tuples of Azure Active Directory principalId, a Azure roleDefinitionId, and an optional principalIdDisplayName. The roleDefinition specified is granted to the principalId in the provider's Active Directory and the principalIdDisplayName is visible to customers."
+            }
+        },
+        "marketplaceOffer": {
+            "type": "string",
+            "defaultValue": "No",
+            "metadata": {
+                "description": "Does this deployment include plan details that match an offer published in the Azure Marketplace?"
+            }
+        },
+        "marketplacePublisherId": {
+            "type": "string",
+            "defaultValue": "ICB Digital Norway",
+            "metadata": {
+                "description": "Must match the Azure Marketplace Publisher ID for the marketplace offer."
+            }
+        },
+        "marketplaceOfferId": {
+            "type": "string",
+            "defaultValue": "Upkip IIoT",
+            "metadata": {
+                "description": "Must match the Azure Marketplace Offer ID for the marketplace offer."
+            }
+        },
+        "marketplacePlanId": {
+            "type": "string",
+            "defaultValue": "Trial",
+            "metadata": {
+                "description": "Must match the Azure Marketplace Plan ID for the plan within the marketplace offer."
+            }
+        },
+        "marketplacePlanVersion": {
+            "type": "string",
+            "defaultValue": "1.0",
+            "metadata": {
+                "description": "Must match the Azure Marketplace Plan version for the plan within the marketplace offer."
+            }
+        },
+		"authorizations": {
+      "defaultValue": [
+        {
+          "principalId": "a5d3e4de-fb03-413e-bdcb-0121fd2d5669",
+          "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c", 
+          "principalIdDisplayName": "Upkip Support"
+        },
+        {
+          "principalId": "eb63aaaa-b345-45f5-bfc1-7458b14a9261",
+          "roleDefinitionId": "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9",
+          "principalIdDisplayName": "Upkip Security",
+		  "delegatedRoleDefinitionIds":[
+			  "b24988ac-6180-42a0-ab88-20f7382dd24c"
+		  ]
+        }
+      ]
+	  }
+    },
+    "variables": {
+        "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
+        "mspAssignmentName": "[guid(parameters('mspOfferName'))]",
+        "marketplacePlan": {
+            "name": "[parameters('marketplacePlanId')]",
+            "product": "[parameters('marketplaceOfferId')]",
+            "publisher": "[parameters('marketplacePublisherId')]",
+            "version": "[parameters('marketplacePlanVersion')]"
+        }        
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedServices/registrationDefinitions",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('mspRegistrationName')]",
+            "properties": {
+                "registrationDefinitionName": "[parameters('mspOfferName')]",
+                "description": "[parameters('mspOfferDescription')]",
+                "managedByTenantId": "[parameters('managedByTenantId')]",
+                "authorizations": "[parameters('authorizations')]"
+            },
+            "plan": "[if(equals(parameters('marketplaceOffer'), 'Yes'), variables('marketplacePlan'), json('null'))]"
+        },
+        {
+            "type": "Microsoft.ManagedServices/registrationAssignments",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('mspAssignmentName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+            ],
+            "properties": {
+                "registrationDefinitionId": "[resourceId('Microsoft.ManagedServices/registrationDefinitions/', variables('mspRegistrationName'))]"
+            }
+        }
+    ],
+    "outputs": {
+        "mspOfferName": {
+            "type": "string",
+            "value": "[concat('Managed by', ' ', parameters('mspOfferName'))]"
+        },
+        "authorizations": {
+            "type": "array",
+            "value": "[parameters('authorizations')]"
+        },
+        "marketplace": {
+            "type": "object",
+            "value": "[if(equals(parameters('marketplaceOffer'), 'Yes'), variables('marketplacePlan'), json('{\"offer\": \"No marketplace offer\"}'))]"
+        }
+    }
+}
