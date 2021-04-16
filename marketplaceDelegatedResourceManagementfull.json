@@ -4,18 +4,21 @@
     "parameters": {
         "mspOfferName": {
             "type": "string",
+			"defaultValue": "Upkip IIoT",
             "metadata": {
                 "description": "Provide a name for this registration definition. For example the name of the Managed Service Provider's offer"
             }
         },
         "mspOfferDescription": {
             "type": "string",
+			"defaultValue": "Upkip IIoT platform delegated resource management",
             "metadata": {
                 "description": "Provide a description for this registration definition. For example contact or contract details."
             }
         },
         "managedByTenantId": {
             "type": "string",
+			"defaultValue": "d4f23865-c0bd-4784-8c5c-165750372dc3",
             "metadata": {
                 "description": "Specify the Azure Active Directory tenant id of the Managed Service Provider. Resources will be shared to this tenant."
             }
@@ -28,35 +31,35 @@
         },
         "marketplaceOffer": {
             "type": "string",
-            "defaultValue": "Yes",
+            "defaultValue": "No",
             "metadata": {
                 "description": "Does this deployment include plan details that match an offer published in the Azure Marketplace?"
             }
         },
         "marketplacePublisherId": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "ICB Digital (Norway)",
             "metadata": {
                 "description": "Must match the Azure Marketplace Publisher ID for the marketplace offer."
             }
         },
         "marketplaceOfferId": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "Upkip IIoT",
             "metadata": {
                 "description": "Must match the Azure Marketplace Offer ID for the marketplace offer."
             }
         },
         "marketplacePlanId": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "Trial",
             "metadata": {
                 "description": "Must match the Azure Marketplace Plan ID for the plan within the marketplace offer."
             }
         },
         "marketplacePlanVersion": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "1.0",
             "metadata": {
                 "description": "Must match the Azure Marketplace Plan version for the plan within the marketplace offer."
             }
