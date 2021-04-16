@@ -23,6 +23,12 @@
                 "description": "Specify the Azure Active Directory tenant id of the Managed Service Provider. Resources will be shared to this tenant."
             }
         },
+		"authorizations": {
+            "type": "array",
+            "metadata": {
+                "description": "Specify an array of objects, containing tuples of Azure Active Directory principalId, a Azure roleDefinitionId, and an optional principalIdDisplayName. The roleDefinition specified is granted to the principalId in the provider's Active Directory and the principalIdDisplayName is visible to customers."
+            }
+        },
         "marketplaceOffer": {
             "type": "string",
             "defaultValue": "No",
@@ -58,24 +64,6 @@
                 "description": "Must match the Azure Marketplace Plan version for the plan within the marketplace offer."
             }
         },
-		"authorizations": {
-      "defaultValue": [
-        {
-          "principalId": "a5d3e4de-fb03-413e-bdcb-0121fd2d5669",
-          "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c", 
-          "principalIdDisplayName": "Upkip Support"
-        },
-        {
-          "principalId": "eb63aaaa-b345-45f5-bfc1-7458b14a9261",
-          "roleDefinitionId": "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9",
-          "principalIdDisplayName": "Upkip Security",
-		  "delegatedRoleDefinitionIds":[
-			  "b24988ac-6180-42a0-ab88-20f7382dd24c"
-		  ]
-        }
-      ]
-	  }
-    },
     "variables": {
         "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
         "mspAssignmentName": "[guid(parameters('mspOfferName'))]",
@@ -125,4 +113,5 @@
             "value": "[if(equals(parameters('marketplaceOffer'), 'Yes'), variables('marketplacePlan'), json('{\"offer\": \"No marketplace offer\"}'))]"
         }
     }
+}
 }
