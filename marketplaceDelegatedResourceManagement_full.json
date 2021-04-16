@@ -4,26 +4,23 @@
     "parameters": {
         "mspOfferName": {
             "type": "string",
-			"defaultValue": "Upkip IIoT",
             "metadata": {
                 "description": "Provide a name for this registration definition. For example the name of the Managed Service Provider's offer"
             }
         },
         "mspOfferDescription": {
             "type": "string",
-			"defaultValue": "Upkip IIoT platform delegated resource management",
             "metadata": {
                 "description": "Provide a description for this registration definition. For example contact or contract details."
             }
         },
         "managedByTenantId": {
             "type": "string",
-			"defaultValue": "d4f23865-c0bd-4784-8c5c-165750372dc3",
             "metadata": {
                 "description": "Specify the Azure Active Directory tenant id of the Managed Service Provider. Resources will be shared to this tenant."
             }
         },
-		"authorizations": {
+        "authorizations": {
             "type": "array",
             "metadata": {
                 "description": "Specify an array of objects, containing tuples of Azure Active Directory principalId, a Azure roleDefinitionId, and an optional principalIdDisplayName. The roleDefinition specified is granted to the principalId in the provider's Active Directory and the principalIdDisplayName is visible to customers."
@@ -31,39 +28,40 @@
         },
         "marketplaceOffer": {
             "type": "string",
-            "defaultValue": "No",
+            "defaultValue": "Yes",
             "metadata": {
                 "description": "Does this deployment include plan details that match an offer published in the Azure Marketplace?"
             }
         },
         "marketplacePublisherId": {
             "type": "string",
-            "defaultValue": "ICB Digital Norway",
+            "defaultValue": "",
             "metadata": {
                 "description": "Must match the Azure Marketplace Publisher ID for the marketplace offer."
             }
         },
         "marketplaceOfferId": {
             "type": "string",
-            "defaultValue": "Upkip IIoT",
+            "defaultValue": "",
             "metadata": {
                 "description": "Must match the Azure Marketplace Offer ID for the marketplace offer."
             }
         },
         "marketplacePlanId": {
             "type": "string",
-            "defaultValue": "Trial",
+            "defaultValue": "",
             "metadata": {
                 "description": "Must match the Azure Marketplace Plan ID for the plan within the marketplace offer."
             }
         },
         "marketplacePlanVersion": {
             "type": "string",
-            "defaultValue": "1.0",
+            "defaultValue": "",
             "metadata": {
                 "description": "Must match the Azure Marketplace Plan version for the plan within the marketplace offer."
             }
-        },
+        }
+    },
     "variables": {
         "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
         "mspAssignmentName": "[guid(parameters('mspOfferName'))]",
@@ -113,5 +111,4 @@
             "value": "[if(equals(parameters('marketplaceOffer'), 'Yes'), variables('marketplacePlan'), json('{\"offer\": \"No marketplace offer\"}'))]"
         }
     }
-}
 }
